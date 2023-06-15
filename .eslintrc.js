@@ -1,20 +1,9 @@
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true
-  },
-  extends: [
-    'standard-with-typescript',
-    'plugin:react/recommended'
-  ],
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module'
-  },
-  plugins: [
-    'react'
-  ],
+  root: true,
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint', 'prettier'],
+  extends: ['airbnb', 'plugin:@typescript-eslint/recommended', 'prettier'],
   rules: {
-    'object-curly-spacing': ['error', 'always']
+    'prettier/prettier': 'error'
   }
 }
