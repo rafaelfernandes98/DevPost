@@ -1,5 +1,5 @@
 
-import { Alert, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Text, View } from 'react-native';
 import { Button, ButtonText, Container, Input, SignUpButton, SignUpText, Title } from './styles'
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/auth';
@@ -10,7 +10,7 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const {signUp} = useContext(AuthContext)
+  const { signUp, signIn, loadingAuth } = useContext(AuthContext)
 
   function toggleLogin(){
     setLogin(!login)
@@ -23,6 +23,10 @@ export function Login() {
     if( email === '' || password === ''){
       Alert.alert('Preencha todos os campos!')
       return
+    }
+
+    if (signIn){
+      signIn(email, password)
     }
   }
 
@@ -57,7 +61,11 @@ export function Login() {
         />
 
         <Button onPress={handleSignIn}>
-          <ButtonText>Acessar</ButtonText>
+          {loadingAuth ? (
+            <ActivityIndicator size={20} color='#fff' />
+          ) : (
+            <ButtonText>Acessar</ButtonText>
+          )}
         </Button>
 
         <SignUpButton onPress={toggleLogin}>
@@ -91,7 +99,11 @@ export function Login() {
       />
 
       <Button onPress={handleSignUp}>
-        <ButtonText>Cadastrar</ButtonText>
+        {loadingAuth ? (
+          <ActivityIndicator size={20}color='#fff'/>
+        ): (
+          <ButtonText>Cadastrar</ButtonText>
+        )}
       </Button>
 
       <SignUpButton onPress={toggleLogin}>

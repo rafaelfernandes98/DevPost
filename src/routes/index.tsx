@@ -6,9 +6,8 @@ import { AuthContext } from '../contexts/auth';
 
 export function Routes() {
 
-  const { signed } = useContext(AuthContext)
+  const { signed, loading } = useContext(AuthContext)
 
-  const loading = false
 
   if (loading) {
     return (
