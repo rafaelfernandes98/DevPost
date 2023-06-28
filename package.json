@@ -22,6 +22,7 @@
     "react-native": "0.71.8",
     "react-native-safe-area-context": "^4.5.3",
     "react-native-screens": "^3.20.0",
+    "react-native-vector-icons": "^9.2.0",
     "styled-components": "^6.0.0-rc.3"
   },
   "devDependencies": {
@@ -33,6 +34,7 @@
     "@types/firebase": "^3.2.1",
     "@types/jest": "^29.2.1",
     "@types/react": "^18.0.24",
+    "@types/react-native-vector-icons": "^6.4.13",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "babel-jest": "^29.2.1",
