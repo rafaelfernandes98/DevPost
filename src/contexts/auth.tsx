@@ -16,12 +16,14 @@ type ContextType = {
   signOut?: ()=>void
   loadingAuth: boolean
   loading: boolean
+  user: UserType | null
 }
 
 export const AuthContext = createContext<ContextType>({
   signed: false,
   loadingAuth: false,
-  loading: true
+  loading: true,
+  user: null
 })
 
 export function AuthProvider({ children }: Props){
@@ -108,7 +110,7 @@ export function AuthProvider({ children }: Props){
   }
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, signUp, signIn, signOut, loadingAuth, loading }}>
+    <AuthContext.Provider value={{ user, signed: !!user, signUp, signIn, signOut, loadingAuth, loading }}>
       {children}
     </AuthContext.Provider>
   )
