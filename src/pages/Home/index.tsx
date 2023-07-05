@@ -5,13 +5,14 @@ import { CompositeNavigationProp, useFocusEffect, useNavigation } from '@react-n
 import { Header } from '../../components/Header';
 import { useCallback, useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/auth';
-import firestore from '@react-native-firebase/firestore'
+import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore'
 import { PostsList } from '../../components/PostsList';
+import { PostType } from '../../types/post';
 
 export function Home() {
   const navigation = useNavigation()
   const { user } = useContext(AuthContext)
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<PostType[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingRefresh, setLoadingRefresh] = useState(false);
   const [lastItem, setLastItem] = useState({});
@@ -90,13 +91,19 @@ export function Home() {
     .startAfter(lastItem)
     .get()
     .then((snapshot)=>{
-      const postList: any[] = []
+      const postList: PostType[] = []
 
-      snapshot.docs.map(u => {
-        postList.push({
-          ...u.data(),
-          id: u.id
-        })
+      snapshot.docs.map((u) => {
+        let data: PostType = {
+          id: u.id,
+          autor: u.data().autor,
+          avatarUrl: u.data().avatarUrl,
+          content: u.data().content,
+          created: u.data().created,
+          likes: u.data().likes,
+          userId: u.data().userId
+        }
+        postList.push(data)
       })
 
       setEmptyList(!!snapshot.empty)
@@ -119,9 +126,7 @@ export function Home() {
         <ListPosts
           data={posts}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <PostsList data={item} userId={user?.uid}/>
-          )}
+          renderItem={({ item }) => (<PostsList data={item as PostType} userId={user?.uid} />)}
           refreshing={loadingRefresh}
           onRefresh={handleRefreshPosts}
           onEndReached={() => getListPosts()}

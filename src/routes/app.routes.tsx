@@ -7,15 +7,16 @@ import { Profile } from '../pages/Profile';
 import Feather from 'react-native-vector-icons/Feather'
 import { NewPost } from '../pages/NewPost';
 import { PostsUser } from '../pages/PostsUser';
+import { RouteParams, RouteProps } from '../types/route';
 
 const Tab  = createBottomTabNavigator()
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator<RouteParams>()
 
 function StackRoutes(){
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name='home'
+        name='Home'
         component={Home}
         options={{
           headerShown: false,

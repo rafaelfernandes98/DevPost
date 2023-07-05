@@ -4,15 +4,19 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { formatDistance } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import firestore from '@react-native-firebase/firestore'
+import { PostType } from "../../types/post";
+import { useNavigation } from "@react-navigation/native";
+import { RouteParams, RouteProps } from "../../types/route";
 
 type Props ={
   userId?: string,
-  data: any
+  data: PostType
 }
 
 export function PostsList({ data, userId } : Props): JSX.Element{
+  const navigation = useNavigation<RouteProps>()
 
-  const { likes, avatarUrl, autor, content, created } = data
+  const { likes, avatarUrl, autor, content, userId: id } = data
 
   const [likePost, setLikePost] = useState(likes);
 
@@ -59,7 +63,7 @@ export function PostsList({ data, userId } : Props): JSX.Element{
 
   return (
     <Container>
-      <Header>
+      <Header onPress={() => navigation.navigate("PostsUser", { title: autor, userId: id })}>
         {avatarUrl ? (
           <Avatar
             source={{uri: avatarUrl}}
