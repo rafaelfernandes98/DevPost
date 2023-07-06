@@ -27,12 +27,17 @@ export function Home() {
         .then((snapshot)=>{
           if (isActive){
             setPosts([])
-            const postList: any[] = []
+            const postList: PostType[] = []
 
             snapshot.docs.map(u =>{
               postList.push({
-                ...u.data(),
-                id: u.id
+                id: u.id,
+                autor: u.data().autor,
+                avatarUrl: u.data().avatarUrl,
+                content: u.data().content,
+                created: u.data().created,
+                likes: u.data().likes,
+                userId: u.data().userId
               })
             })
 

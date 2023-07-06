@@ -3,3 +3,8 @@ export type UserType = {
   nome: string,
   email: string | null,
 }
+
+export type UserDocType =  {
+  id: string,
+  nome: string,
+}
