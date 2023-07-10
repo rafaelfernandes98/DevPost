@@ -17,13 +17,15 @@ type ContextType = {
   loadingAuth: boolean
   loading: boolean
   user: UserType | null
+  setUser?: (user: UserType)=>void
+  storageUser?: (data: object)=>void
 }
 
 export const AuthContext = createContext<ContextType>({
   signed: false,
   loadingAuth: false,
   loading: true,
-  user: null
+  user: null,
 })
 
 export function AuthProvider({ children }: Props){
@@ -110,7 +112,7 @@ export function AuthProvider({ children }: Props){
   }
 
   return (
-    <AuthContext.Provider value={{ user, signed: !!user, signUp, signIn, signOut, loadingAuth, loading }}>
+    <AuthContext.Provider value={{ user, signed: !!user, setUser, storageUser, signUp, signIn, signOut, loadingAuth, loading }}>
       {children}
     </AuthContext.Provider>
   )
