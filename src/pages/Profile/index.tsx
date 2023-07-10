@@ -1,20 +1,52 @@
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/auth';
-import { Avatar, Button, ButtonBack, ButtonText, Container, Email, Input, ModalContainer, Name, UploadButton, UploadText } from './styles';
+import {
+  Avatar,
+  Button,
+  ButtonBack,
+  ButtonText,
+  Container,
+  Email,
+  Input,
+  ModalContainer,
+  Name,
+  UploadButton,
+  UploadText
+} from './styles';
+import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker'
 import { Header } from '../../components/Header';
 import { Modal, Platform } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather'
 import firestore from '@react-native-firebase/firestore'
 import { UserType } from '../../types/user';
+import storage from '@react-native-firebase/storage'
 
 
 export function Profile() {
   const { signOut, user, setUser, storageUser } = useContext(AuthContext)
 
   const [name, setName] = useState<string>(user?.nome ? user?.nome : '');
-  const [url, setUrl] = useState(null);
+  const [url, setUrl] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+
+  useEffect(()=>{
+    async function loadAvatar(){
+      if (!user?.uid) return
+      try {
+        let response = await storage().ref('users').child(user?.uid).getDownloadURL()
+
+        setUrl(response)
+      } catch (error) {
+        console.log('error: ', error);
+      }
+    }
+
+    loadAvatar()
+
+    // return () => loadAvatar()
+
+  },[])
 
 
   function handleSignOut(){
@@ -53,19 +85,75 @@ export function Profile() {
     }
   }
 
+  function uploadFile(){
+    launchImageLibrary({
+        // noData: true,
+        mediaType: 'photo',
+      }, response =>{
+      if(response.didCancel){
+        console.log('Cancelou');
+      }else if(response.errorCode){
+        console.log('Erro');
+      }else {
+        uploadFileFirebase(response)
+        .then(()=>{
+          uploadAvatarPosts()
+        })
+
+        if (response.assets){
+          setUrl(response.assets[0].uri ? response.assets[0].uri : '')
+        }
+
+      }
+    })
+  }
+
+  async function uploadAvatarPosts(){
+    if (!user?.uid) return
+
+    const storageRef = storage().ref('users').child(user?.uid)
+    await storageRef.getDownloadURL()
+    .then(async(image)=>{
+      const postDocs = await firestore().collection('posts').where('userId', '==', user.uid).get()
+
+      postDocs.forEach(async doc =>{
+        await firestore().collection('posts').doc(doc.id).update({
+          avatarUrl: image
+        })
+      })
+    })
+    .catch((error)=>{
+      console.log('error: ', error);
+    })
+
+  }
+
+  function getFileLocalPath(response: any){
+    return response.assets[0].uri
+  }
+
+  async function uploadFileFirebase(response: any){
+    if (!user?.uid) return
+    const fileSource = getFileLocalPath(response)
+
+    const storageRef = storage().ref('users').child(user?.uid)
+
+    return await storageRef.putFile(fileSource)
+  }
+
   return (
     <Container>
       <Header/>
 
       {url ? (
-        <UploadButton>
+        <UploadButton onPress={uploadFile}>
           <UploadText>+</UploadText>
           <Avatar
             source={{uri: url}}
           />
         </UploadButton>
       ): (
-          <UploadButton>
+          <UploadButton onPress={uploadFile}>
             <UploadText>+</UploadText>
           </UploadButton>
       )}
