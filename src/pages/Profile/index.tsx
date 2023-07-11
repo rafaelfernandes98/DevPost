@@ -34,18 +34,15 @@ export function Profile() {
     async function loadAvatar(){
       if (!user?.uid) return
       try {
-        let response = await storage().ref('users').child(user?.uid).getDownloadURL()
+          let response = await storage().ref('users').child(user?.uid).getDownloadURL()
+          setUrl(response)
 
-        setUrl(response)
       } catch (error) {
         console.log('error: ', error);
       }
     }
 
     loadAvatar()
-
-    // return () => loadAvatar()
-
   },[])
 
 
