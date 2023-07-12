@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "dev": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "jest:watch": "NODE_OPTIONS=--experimental-vm-modules npx jest --no-coverage --verbose --watch",
+    "jest::watch": "jest --no-coverage --verbose --watch"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.18.2",
@@ -31,8 +33,11 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
+    "@babel/preset-typescript": "^7.22.5",
     "@babel/runtime": "^7.20.0",
     "@react-native-community/eslint-config": "^3.2.0",
+    "@testing-library/jest-native": "^5.4.2",
+    "@testing-library/react-native": "^12.1.2",
     "@tsconfig/react-native": "^2.0.2",
     "@types/firebase": "^3.2.1",
     "@types/jest": "^29.2.1",
@@ -56,6 +61,17 @@
     "typescript": "*"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
