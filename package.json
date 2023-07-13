@@ -8,8 +8,8 @@
     "lint": "eslint .",
     "dev": "react-native start",
     "test": "jest",
-    "jest:watch": "NODE_OPTIONS=--experimental-vm-modules npx jest --no-coverage --verbose --watch",
-    "jest::watch": "jest --no-coverage --verbose --watch"
+    "jest::watch": "NODE_OPTIONS=--experimental-vm-modules npx jest --no-coverage --verbose --watch",
+    "jest:watch": "jest --no-coverage --verbose --watch"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.18.2",
@@ -61,7 +61,10 @@
     "typescript": "*"
   },
   "jest": {
-    "preset": "react-native",
+  "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?@react-native|react-native|react-clone-referenced-element|@react-native-community|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|native-base|@sentry/.*)"
+    ],
     "setupFilesAfterEnv": [
       "@testing-library/jest-native/extend-expect"
     ],

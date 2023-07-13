@@ -2,6 +2,7 @@ import { render } from '@testing-library/react-native'
 import { PostsList } from '.'
 
 describe('<PostsList />', () => {
+  // jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
   it('render component', () => {
 
     const data ={
